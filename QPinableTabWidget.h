@@ -32,7 +32,6 @@ public:
    bool isPinned(int index);
 
 protected:
-   void mousePressEvent(QMouseEvent *event) override;
    void mouseReleaseEvent(QMouseEvent *event) override;
 
 private:

@@ -18,18 +18,6 @@ public:
    {
    }
 
-   int indexAtPos(const QPoint &p)
-   {
-      if (tabRect(currentIndex()).contains(p))
-         return currentIndex();
-
-      for (int i = 0; i < count(); ++i)
-         if (isTabEnabled(i) && tabRect(i).contains(p))
-            return i;
-
-      return -1;
-   }
-
 protected:
    void mousePressEvent(QMouseEvent *event) override
    {
@@ -53,6 +41,18 @@ protected:
 
 private:
    int mIndexToMove = -1;
+
+   int indexAtPos(const QPoint &p)
+   {
+      if (tabRect(currentIndex()).contains(p))
+         return currentIndex();
+
+      for (int i = 0; i < count(); ++i)
+         if (isTabEnabled(i) && tabRect(i).contains(p))
+            return i;
+
+      return -1;
+   }
 };
 }
 
@@ -146,23 +146,6 @@ void QPinableTabWidget::clear()
 bool QPinableTabWidget::isPinned(int index)
 {
    return mTabState.contains(index);
-}
-
-void QPinableTabWidget::mousePressEvent(QMouseEvent *event)
-{
-   const QPoint pos = event->pos();
-   const auto trCorner = cornerWidget(Qt::TopRightCorner);
-   const auto tlCorner = cornerWidget(Qt::TopLeftCorner);
-   const bool isEventInCornerButtons = (tlCorner && !tlCorner->isHidden() && tlCorner->geometry().contains(pos))
-       || (trCorner && !trCorner->isHidden() && trCorner->geometry().contains(pos));
-
-   if (!isEventInCornerButtons)
-   {
-      const int index = dynamic_cast<TabBarPin *>(tabBar())->indexAtPos(pos);
-
-      if (!mTabState.contains(index))
-         QTabWidget::mousePressEvent(event);
-   }
 }
 
 void QPinableTabWidget::mouseReleaseEvent(QMouseEvent *event)
