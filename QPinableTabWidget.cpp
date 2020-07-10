@@ -63,7 +63,7 @@ QPinableTabWidget::QPinableTabWidget(QWidget *parent)
 
    setTabsClosable(true);
    setMovable(true);
-   connect(this, &QTabWidget::tabCloseRequested, this, &QPinableTabWidget::removeTab);
+   connect(this, &QTabWidget::tabCloseRequested, this, &QPinableTabWidget::removeTab, Qt::QueuedConnection);
    connect(this, &QTabWidget::tabBarClicked, this, &QPinableTabWidget::clickRequested);
 }
 
