@@ -1,6 +1,6 @@
 QT       += core gui widgets
 
-TARGET = QTabWidgetPin
+TARGET = QPinableTabWidget
 
 CONFIG += c++17
 
