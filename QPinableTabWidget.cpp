@@ -167,7 +167,7 @@ void QPinableTabWidget::showContextMenu()
    if (!mPrepareMenu)
       return;
 
-   const auto actions = new QMenu();
+   const auto actions = new QMenu(this);
 
    if (mTabState.value(mClickedTab))
       connect(actions->addAction("Unpin"), &QAction::triggered, this, &QPinableTabWidget::unpinTab);
