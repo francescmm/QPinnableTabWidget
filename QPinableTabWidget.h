@@ -31,6 +31,8 @@ public:
 
    bool isPinned(int index);
 
+   int getLastPinnedTabIndex() const;
+
 protected:
    void mouseReleaseEvent(QMouseEvent *event) override;
 

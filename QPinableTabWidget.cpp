@@ -21,26 +21,37 @@ public:
 protected:
    void mousePressEvent(QMouseEvent *event) override
    {
-      const QPoint pos = event->pos();
-      mIndexToMove = indexAtPos(pos);
+      mIndexToMove = indexAtPos(event->pos());
+      mDistToStart = event->x() - tabRect(mIndexToMove).x();
 
       QTabBar::mousePressEvent(event);
    }
 
    void mouseMoveEvent(QMouseEvent *event) override
    {
-      if (!dynamic_cast<QPinableTabWidget *>(parentWidget())->isPinned(mIndexToMove))
+      const auto currentPinned = dynamic_cast<QPinableTabWidget *>(parentWidget())->isPinned(mIndexToMove);
+      const auto newPosIsPinned = dynamic_cast<QPinableTabWidget *>(parentWidget())->isPinned(indexAtPos(event->pos()));
+      const auto lastPinnedTab = dynamic_cast<QPinableTabWidget *>(parentWidget())->getLastPinnedTabIndex();
+
+      if (!currentPinned && !newPosIsPinned && (event->pos().x() - mDistToStart) > tabRect(lastPinnedTab).right())
          QTabBar::mouseMoveEvent(event);
    }
 
    void mouseReleaseEvent(QMouseEvent *event) override
    {
+      const auto currentPinned = dynamic_cast<QPinableTabWidget *>(parentWidget())->isPinned(mIndexToMove);
+      const auto newPosIsPinned = dynamic_cast<QPinableTabWidget *>(parentWidget())->isPinned(indexAtPos(event->pos()));
+
       mIndexToMove = -1;
-      QTabBar::mouseReleaseEvent(event);
+      mDistToStart = 0;
+
+      if (!currentPinned && !newPosIsPinned)
+         QTabBar::mouseReleaseEvent(event);
    }
 
 private:
    int mIndexToMove = -1;
+   int mDistToStart = 0;
 
    int indexAtPos(const QPoint &p)
    {
@@ -146,6 +157,11 @@ void QPinableTabWidget::clear()
 bool QPinableTabWidget::isPinned(int index)
 {
    return mTabState.contains(index);
+}
+
+int QPinableTabWidget::getLastPinnedTabIndex() const
+{
+   return mLastPinTab - 1;
 }
 
 void QPinableTabWidget::mouseReleaseEvent(QMouseEvent *event)
