@@ -39,14 +39,10 @@ protected:
 
    void mouseReleaseEvent(QMouseEvent *event) override
    {
-      const auto currentPinned = dynamic_cast<QPinableTabWidget *>(parentWidget())->isPinned(mIndexToMove);
-      const auto newPosIsPinned = dynamic_cast<QPinableTabWidget *>(parentWidget())->isPinned(indexAtPos(event->pos()));
-
       mIndexToMove = -1;
       mDistToStart = 0;
 
-      if (!currentPinned && !newPosIsPinned)
-         QTabBar::mouseReleaseEvent(event);
+      QTabBar::mouseReleaseEvent(event);
    }
 
 private:
