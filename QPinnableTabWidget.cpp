@@ -1,4 +1,4 @@
-#include "QPinableTabWidget.h"
+#include "QPinnableTabWidget.h"
 
 #include "FakeCloseButton.h"
 #include "RealCloseButton.h"
@@ -29,9 +29,10 @@ protected:
 
    void mouseMoveEvent(QMouseEvent *event) override
    {
-      const auto currentPinned = dynamic_cast<QPinableTabWidget *>(parentWidget())->isPinned(mIndexToMove);
-      const auto newPosIsPinned = dynamic_cast<QPinableTabWidget *>(parentWidget())->isPinned(indexAtPos(event->pos()));
-      const auto lastPinnedTab = dynamic_cast<QPinableTabWidget *>(parentWidget())->getLastPinnedTabIndex();
+      const auto currentPinned = dynamic_cast<QPinnableTabWidget *>(parentWidget())->isPinned(mIndexToMove);
+      const auto newPosIsPinned
+          = dynamic_cast<QPinnableTabWidget *>(parentWidget())->isPinned(indexAtPos(event->pos()));
+      const auto lastPinnedTab = dynamic_cast<QPinnableTabWidget *>(parentWidget())->getLastPinnedTabIndex();
 
       if (!currentPinned && !newPosIsPinned && (event->pos().x() - mDistToStart) > tabRect(lastPinnedTab).right())
          QTabBar::mouseMoveEvent(event);
@@ -63,18 +64,18 @@ private:
 };
 }
 
-QPinableTabWidget::QPinableTabWidget(QWidget *parent)
+QPinnableTabWidget::QPinnableTabWidget(QWidget *parent)
    : QTabWidget(parent)
 {
    setTabBar(new TabBarPin());
 
    setTabsClosable(true);
    setMovable(true);
-   connect(this, &QTabWidget::tabCloseRequested, this, &QPinableTabWidget::removeTab, Qt::QueuedConnection);
-   connect(this, &QTabWidget::tabBarClicked, this, &QPinableTabWidget::clickRequested);
+   connect(this, &QTabWidget::tabCloseRequested, this, &QPinnableTabWidget::removeTab, Qt::QueuedConnection);
+   connect(this, &QTabWidget::tabBarClicked, this, &QPinnableTabWidget::clickRequested);
 }
 
-int QPinableTabWidget::addPinnedTab(QWidget *page, const QString &label)
+int QPinnableTabWidget::addPinnedTab(QWidget *page, const QString &label)
 {
    const auto tabIndex = addTab(page, label);
    tabBar()->setTabButton(
@@ -89,7 +90,7 @@ int QPinableTabWidget::addPinnedTab(QWidget *page, const QString &label)
    return tabIndex;
 }
 
-int QPinableTabWidget::addPinnedTab(QWidget *page, const QIcon &icon, const QString &label)
+int QPinnableTabWidget::addPinnedTab(QWidget *page, const QIcon &icon, const QString &label)
 {
    const auto tabIndex = addTab(page, icon, label);
    tabBar()->setTabButton(
@@ -104,17 +105,17 @@ int QPinableTabWidget::addPinnedTab(QWidget *page, const QIcon &icon, const QStr
    return tabIndex;
 }
 
-int QPinableTabWidget::addTab(QWidget *widget, const QString &s)
+int QPinnableTabWidget::addTab(QWidget *widget, const QString &s)
 {
    return QTabWidget::addTab(widget, s);
 }
 
-int QPinableTabWidget::addTab(QWidget *widget, const QIcon &icon, const QString &label)
+int QPinnableTabWidget::addTab(QWidget *widget, const QIcon &icon, const QString &label)
 {
    return QTabWidget::addTab(widget, icon, label);
 }
 
-int QPinableTabWidget::insertTab(int index, QWidget *widget, const QString &s)
+int QPinnableTabWidget::insertTab(int index, QWidget *widget, const QString &s)
 {
    if (index <= mLastPinTab)
       index = mLastPinTab + 1;
@@ -122,7 +123,7 @@ int QPinableTabWidget::insertTab(int index, QWidget *widget, const QString &s)
    return QTabWidget::insertTab(index, widget, s);
 }
 
-int QPinableTabWidget::insertTab(int index, QWidget *widget, const QIcon &icon, const QString &label)
+int QPinnableTabWidget::insertTab(int index, QWidget *widget, const QIcon &icon, const QString &label)
 {
    if (index <= mLastPinTab)
       index = mLastPinTab + 1;
@@ -130,7 +131,7 @@ int QPinableTabWidget::insertTab(int index, QWidget *widget, const QIcon &icon, 
    return QTabWidget::insertTab(index, widget, icon, label);
 }
 
-void QPinableTabWidget::removeTab(int index)
+void QPinnableTabWidget::removeTab(int index)
 {
    QTabWidget::removeTab(index);
 
@@ -140,7 +141,7 @@ void QPinableTabWidget::removeTab(int index)
    mTabState.remove(index);
 }
 
-void QPinableTabWidget::clear()
+void QPinnableTabWidget::clear()
 {
    QTabWidget::clear();
    mLastPinnedTab = -1;
@@ -150,17 +151,17 @@ void QPinableTabWidget::clear()
    mLastPinTab = 0;
 }
 
-bool QPinableTabWidget::isPinned(int index)
+bool QPinnableTabWidget::isPinned(int index)
 {
    return mTabState.contains(index);
 }
 
-int QPinableTabWidget::getLastPinnedTabIndex() const
+int QPinnableTabWidget::getLastPinnedTabIndex() const
 {
    return mLastPinTab - 1;
 }
 
-void QPinableTabWidget::mouseReleaseEvent(QMouseEvent *event)
+void QPinnableTabWidget::mouseReleaseEvent(QMouseEvent *event)
 {
    if (event->button() == Qt::RightButton)
       showContextMenu();
@@ -168,13 +169,13 @@ void QPinableTabWidget::mouseReleaseEvent(QMouseEvent *event)
       mClickedTab = -1;
 }
 
-void QPinableTabWidget::clickRequested(int index)
+void QPinnableTabWidget::clickRequested(int index)
 {
    mPrepareMenu = true;
    mClickedTab = index;
 }
 
-void QPinableTabWidget::showContextMenu()
+void QPinnableTabWidget::showContextMenu()
 {
    if (!mPrepareMenu)
       return;
@@ -182,16 +183,16 @@ void QPinableTabWidget::showContextMenu()
    const auto actions = new QMenu(this);
 
    if (mTabState.value(mClickedTab))
-      connect(actions->addAction("Unpin"), &QAction::triggered, this, &QPinableTabWidget::unpinTab);
+      connect(actions->addAction("Unpin"), &QAction::triggered, this, &QPinnableTabWidget::unpinTab);
    else
-      connect(actions->addAction("Pin"), &QAction::triggered, this, &QPinableTabWidget::pintTab);
+      connect(actions->addAction("Pin"), &QAction::triggered, this, &QPinnableTabWidget::pintTab);
 
    connect(actions->addAction("Close"), &QAction::triggered, this, [this]() { removeTab(mClickedTab); });
 
    actions->exec(QCursor::pos());
 }
 
-void QPinableTabWidget::pintTab()
+void QPinnableTabWidget::pintTab()
 {
    tabBar()->setTabButton(
        mClickedTab,
@@ -208,7 +209,7 @@ void QPinableTabWidget::pintTab()
    mClickedTab = -1;
 }
 
-void QPinableTabWidget::unpinTab()
+void QPinnableTabWidget::unpinTab()
 {
    tabBar()->setTabButton(
        mClickedTab,

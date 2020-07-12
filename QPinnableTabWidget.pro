@@ -1,6 +1,6 @@
 QT       += core gui widgets
 
-TARGET = QPinableTabWidget
+TARGET = QPinnableTabWidget
 
 CONFIG += c++17
 
@@ -8,16 +8,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 TEMPLATE = lib
 
-SOURCES += \
-    $$PWD/FakeCloseButton.cpp \
-    $$PWD/RealCloseButton.cpp \
-    $$PWD/QPinableTabWidget.cpp
-
-HEADERS += \
-    $$PWD/FakeCloseButton.h \
-    $$PWD/QPinableTabWidget.h \
-    $$PWD/RealCloseButton.h \
-    $$PWD/qpinabletabwidget_global.h
+include(QPinnableTabWidget.pri)
 
 win32 {
     QMAKE_TARGET_PRODUCT = "$$TARGET"

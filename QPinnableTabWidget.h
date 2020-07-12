@@ -1,18 +1,18 @@
 #ifndef QTABWIDGETPIN_H
 #define QTABWIDGETPIN_H
 
-#include <qpinabletabwidget_global.h>
+#include <qpinnabletabwidget_global.h>
 
 #include <QTabWidget>
 #include <QMap>
 
-class QPINABLETABWIDGETLIB_EXPORT QPinableTabWidget : public QTabWidget
+class QPinnableTabWidgetLIB_EXPORT QPinnableTabWidget : public QTabWidget
 {
    Q_OBJECT
 
 public:
-   explicit QPinableTabWidget(QWidget *parent = nullptr);
-   ~QPinableTabWidget() override = default;
+   explicit QPinnableTabWidget(QWidget *parent = nullptr);
+   ~QPinnableTabWidget() override = default;
 
    int addPinnedTab(QWidget *page, const QString &label);
    int addPinnedTab(QWidget *page, const QIcon &icon, const QString &label);
