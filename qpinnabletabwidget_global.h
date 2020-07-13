@@ -2,9 +2,12 @@
 
 #include <QtCore/QtGlobal>
 
-#if defined(QPinnableTabWidgetLIB_LIBRARY)
-#   define QPinnableTabWidgetLIB_EXPORT Q_DECL_EXPORT
+#if defined(__GNUC__)
+#   define QPinnableTabWidgetLIB_EXPORT __attribute__((visibility("default")))
 #else
-#   define QPinnableTabWidgetLIB_EXPORT Q_DECL_IMPORT
+#   if defined(QPinnableTabWidgetLIB_LIBRARY)
+#      define QPinnableTabWidgetLIB_EXPORT Q_DECL_EXPORT
+#   else
+#      define QPinnableTabWidgetLIB_EXPORT Q_DECL_IMPORT
+#   endif
 #endif
-
