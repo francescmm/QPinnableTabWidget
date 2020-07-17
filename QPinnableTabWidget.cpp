@@ -211,10 +211,12 @@ void QPinnableTabWidget::pintTab()
 
 void QPinnableTabWidget::unpinTab()
 {
+   const auto closeBtn = new RealCloseButton();
+
    tabBar()->setTabButton(
        mClickedTab,
        static_cast<QTabBar::ButtonPosition>(style()->styleHint(QStyle::SH_TabBar_CloseButtonPosition, 0, this)),
-       new RealCloseButton());
+       closeBtn);
 
    mTabState.remove(mClickedTab);
 
@@ -235,6 +237,8 @@ void QPinnableTabWidget::unpinTab()
       mTabState.remove(mTabState.lastKey());
 
    tabBar()->moveTab(mClickedTab, mLastPinTab);
+
+   connect(closeBtn, &RealCloseButton::clicked, this, [this]() { emit tabBar()->tabCloseRequested(mLastPinTab); });
 
    mClickedTab = -1;
 }
