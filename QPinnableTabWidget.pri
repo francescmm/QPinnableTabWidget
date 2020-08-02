@@ -7,4 +7,4 @@ HEADERS += \
     $$PWD/FakeCloseButton.h \
     $$PWD/QPinnableTabWidget.h \
     $$PWD/RealCloseButton.h \
-    $$PWD/QPinnableTabWidget_global.h
+    $$PWD/qpinnabletabwidget_global.h
