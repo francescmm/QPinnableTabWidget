@@ -3,7 +3,7 @@
 /****************************************************************************************
  ** QPinnableTabWidget is a library that overrides a QTabWidget to allow the user to pin tabs.
  **
- ** Copyright (C) 2020  Francesc Martinez
+ ** Copyright (C) 2021  Francesc Martinez
  **
  ** LinkedIn: www.linkedin.com/in/cescmm/
  ** Web: www.francescmm.com
@@ -23,12 +23,10 @@
  ** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  ***************************************************************************************/
 
-#include <qpinnabletabwidget_global.h>
-
-#include <QTabWidget>
 #include <QMap>
+#include <QTabWidget>
 
-class QPinnableTabWidgetLIB_EXPORT QPinnableTabWidget : public QTabWidget
+class QPinnableTabWidget : public QTabWidget
 {
    Q_OBJECT
 
@@ -67,7 +65,7 @@ private:
 
    void clickRequested(int index);
    void showContextMenu();
-   void pintTab();
+   void pinTab();
    void unpinTab();
    QTabBar *tabBar() const { return QTabWidget::tabBar(); }
    void setTabsClosable(bool closeable) { QTabWidget::setTabsClosable(closeable); }
