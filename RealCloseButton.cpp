@@ -24,7 +24,11 @@ QSize RealCloseButton::sizeHint() const
    return QSize(width, height);
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void RealCloseButton::enterEvent(QEvent *event)
+#else
+void RealCloseButton::enterEvent(QEnterEvent *event)
+#endif
 {
    if (isEnabled())
       update();
@@ -42,7 +46,8 @@ void RealCloseButton::paintEvent(QPaintEvent *)
 {
    QPainter p(this);
    QStyleOption opt;
-   opt.init(this);
+
+   opt.initFrom(this);
    opt.state |= QStyle::State_AutoRaise;
    if (isEnabled() && underMouse() && !isChecked() && !isDown())
       opt.state |= QStyle::State_Raised;
