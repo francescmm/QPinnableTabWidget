@@ -13,7 +13,7 @@ RealCloseButton::RealCloseButton(QWidget *parent)
 #ifndef QT_NO_TOOLTIP
    setToolTip(tr("Close Tab"));
 #endif
-   resize(sizeHint());
+   resize(RealCloseButton::sizeHint());
 }
 
 QSize RealCloseButton::sizeHint() const
