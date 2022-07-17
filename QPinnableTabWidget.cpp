@@ -5,8 +5,8 @@
 
 #include <QMenu>
 #include <QMouseEvent>
-#include <QTabBar>
 #include <QStyle>
+#include <QTabBar>
 
 namespace
 {
@@ -167,10 +167,15 @@ int QPinnableTabWidget::getLastPinnedTabIndex() const
 
 void QPinnableTabWidget::mouseReleaseEvent(QMouseEvent *event)
 {
-   if (event->button() == Qt::RightButton)
+   if (event->button() == Qt::RightButton && mPrepareMenu && tabBar()->rect().contains(event->pos()))
+   {
       showContextMenu();
+   }
    else
+   {
       mClickedTab = -1;
+      mPrepareMenu = false;
+   }
 }
 
 void QPinnableTabWidget::clickRequested(int index)
@@ -192,6 +197,14 @@ void QPinnableTabWidget::showContextMenu()
       connect(actions->addAction("Pin"), &QAction::triggered, this, &QPinnableTabWidget::pinTab);
 
    connect(actions->addAction("Close"), &QAction::triggered, this, [this]() { emit tabCloseRequested(mClickedTab); });
+   connect(actions->addAction("Close all"), &QAction::triggered, this, [this]() {
+      std::vector<int> tabsToClose;
+      for (auto i = count() - 1; i >= 0; --i)
+      {
+         if (!isPinned(i))
+            emit tabCloseRequested(i);
+      }
+   });
 
    actions->exec(QCursor::pos());
 }
