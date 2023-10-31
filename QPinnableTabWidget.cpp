@@ -22,7 +22,7 @@ protected:
    void mousePressEvent(QMouseEvent *event) override
    {
       mIndexToMove = indexAtPos(event->pos());
-      mDistToStart = event->x() - tabRect(mIndexToMove).x();
+      mDistToStart = event->pos().x() - tabRect(mIndexToMove).x();
 
       QTabBar::mousePressEvent(event);
    }
