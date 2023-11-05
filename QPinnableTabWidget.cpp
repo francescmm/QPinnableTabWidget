@@ -167,10 +167,7 @@ int QPinnableTabWidget::getLastPinnedTabIndex() const
 
 void QPinnableTabWidget::mouseReleaseEvent(QMouseEvent *event)
 {
-   const auto ePos = event->pos();
-   const auto tabBarPos = tabBar()->pos();
-   const auto tabBarRect = QRect(tabBarPos, tabBar()->size());
-   const auto inPos = tabBarRect.contains(event->pos());
+   const auto inPos = QRect(tabBar()->pos(), tabBar()->size()).contains(event->pos());
 
    if (event->button() == Qt::RightButton && mPrepareMenu && inPos)
    {
