@@ -150,7 +150,7 @@ void QPinnableTabWidget::clear()
    QTabWidget::clear();
    mLastPinnedTab = -1;
    mTabState.clear();
-   mPrepareMenu = false;
+   mClicking = false;
    mClickedTab = -1;
    mLastPinTab = 0;
 }
@@ -169,26 +169,31 @@ void QPinnableTabWidget::mouseReleaseEvent(QMouseEvent *event)
 {
    const auto inPos = QRect(tabBar()->pos(), tabBar()->size()).contains(event->pos());
 
-   if (event->button() == Qt::RightButton && mPrepareMenu && inPos)
+   if (mClicking && inPos)
    {
-      showContextMenu();
+      if (event->button() == Qt::RightButton)
+      {
+         showContextMenu();
+      }
+      else if (event->button() == Qt::MiddleButton)
+      {
+         emit tabCloseRequested(mClickedTab);
+      }
    }
-   else
-   {
-      mClickedTab = -1;
-      mPrepareMenu = false;
-   }
+   // Reset state after click handling
+   mClickedTab = -1;
+   mClicking = false;
 }
 
 void QPinnableTabWidget::clickRequested(int index)
 {
-   mPrepareMenu = true;
+   mClicking = true;
    mClickedTab = index;
 }
 
 void QPinnableTabWidget::showContextMenu()
 {
-   if (!mPrepareMenu)
+   if (!mClicking)
       return;
 
    const auto actions = new QMenu(this);

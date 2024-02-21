@@ -59,7 +59,7 @@ protected:
 private:
    int mLastPinnedTab = -1;
    QMap<int, bool> mTabState;
-   bool mPrepareMenu = false;
+   bool mClicking = false;
    int mClickedTab = -1;
    int mLastPinTab = 0;
 
