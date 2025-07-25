@@ -24,11 +24,7 @@ QSize RealCloseButton::sizeHint() const
    return QSize(width, height);
 }
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-void RealCloseButton::enterEvent(QEvent *event)
-#else
 void RealCloseButton::enterEvent(QEnterEvent *event)
-#endif
 {
    if (isEnabled())
       update();
